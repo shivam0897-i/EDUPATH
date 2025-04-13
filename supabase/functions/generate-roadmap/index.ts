@@ -48,13 +48,14 @@ async function generateRoadmapContent(prompt: string, apiKey: string): Promise<R
           
 Input Information:
 ${prompt}
-
+          
 Requirements:
-1. The roadmap should be practical and achievable
-2. Include specific, actionable steps
-3. Recommend high-quality, relevant resources
-4. Consider the user's time commitment and background
-5. Focus on progressive skill development
+1.  The roadmap should be practical and achievable **and highly tailored to the specific details provided in the input information**.
+2.  Include specific, actionable steps **that are directly relevant to the user's goals, background, skills, and time commitment**.
+3.  Recommend high-quality, relevant resources **that align with the user's unique profile and learning objectives**.
+4.  Consider the user's time commitment and background **to create a realistic and effective learning plan**.
+ 5.  Focus on progressive skill development **that builds upon the user's existing skills and leads them towards their stated goals**.
+6.  The roadmap should be significantly different for different input profiles, reflecting the unique needs and circumstances of each user.
 
 Provide the response in this exact JSON format:
 {
