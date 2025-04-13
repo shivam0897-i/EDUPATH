@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { GraduationCap, BookOpen, Clock, Target, Sparkles, ExternalLink } from 'lucide-react';
 import { supabase } from './lib/supabase';
 import { generateRoadmap } from './lib/ai';
@@ -46,6 +47,7 @@ function App() {
   const [showRoadmap, setShowRoadmap] = useState(false);
   const [roadmap, setRoadmap] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -78,6 +80,7 @@ function App() {
       setLoading(true);
       try {
         const roadmapData = await generateRoadmap(newAnswers);
+        console.log("Roadmap data from API:", roadmapData);
         setRoadmap(roadmapData);
         setShowRoadmap(true);
       } catch (error) {
@@ -92,10 +95,19 @@ function App() {
     return <Auth />;
   }
 
+  const handleRegenerateRoadmap = () => {
+    setAnswers({});
+    setRoadmap(null);
+    setShowRoadmap(false);
+    setCurrentStep(0);
+    navigate("/");
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center p-8">
         <div className="text-center">
+
           <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-600 mx-auto mb-4"></div>
           <p className="text-lg text-gray-600">Generating your personalized roadmap...</p>
         </div>
@@ -103,6 +115,7 @@ function App() {
     );
   }
 
+  
   if (showRoadmap && roadmap) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 p-8">
@@ -117,6 +130,12 @@ function App() {
           </div>
           <div className="bg-white rounded-2xl shadow-xl p-8">
             <div className="flex items-center gap-2 mb-8">
+              <button 
+                onClick={handleRegenerateRoadmap}
+                className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+              New Roadmap
+              </button>    
+
               <Sparkles className="w-8 h-8 text-purple-600" />
               <h1 className="text-3xl font-bold text-gray-800">{roadmap.title}</h1>
             </div>
